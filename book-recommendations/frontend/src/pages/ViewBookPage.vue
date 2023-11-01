@@ -236,10 +236,6 @@ export default {
         this.bookData = bookData;
         this.updateDocumentTitle();
         this.isbn = bookData.isbn;
-        if (await this.isAwsEnabledAndIsbnValid()) {
-          await this.getRecommendations();
-          await this.postDataIfAuthenticated();
-        }
       }
       this.isLoading = false;
     },
@@ -256,10 +252,6 @@ export default {
         this.bookData = await getBookInfo(this.isbn, queryData.title, queryData.authors);
         this.updateDocumentTitle();
         this.isLoading = false;
-        if (await this.isAwsEnabledAndIsbnValid()) {
-          await this.getRecommendations();
-          await this.postDataIfAuthenticated();
-        }
       } catch (error) {
         this.isLoading = false;
       }
@@ -283,19 +275,6 @@ export default {
         return details.join(', ');
       }
       return details.toString();
-    },
-    async getRecommendations() {
-      this.recommendations = await getRecs(this.isbn);
-    },
-    async postDataIfAuthenticated() {
-      if (this.$auth.isAuthenticated) {
-        const token = await this.$auth.getTokenSilently();
-        await exportData(this.bookData, token);
-        await updateAws(this.bookData, token);
-      }
-    },
-    async isAwsEnabledAndIsbnValid() {
-      return await isAwsEnabled() && this.isIsbnValid;
     },
     goToGoogle() {
       window.open("https://www.google.com", "_blank")
