@@ -1,6 +1,7 @@
 package com.bestreads.bookrecommendations.book;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "books")
@@ -17,25 +19,37 @@ public class BookDAO implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column
   private String title;
 
+  @Column
   private String author;
 
+  @Column
   private String thumbnail;
 
-  private String publishedDate;
+  @Column
+  private Date publishedDate;
 
   @Column(unique = true, length = 20)
   private String isbn;
 
+  @Column
   private String genre;
 
+  @Column
   private String publisher;
+
+  @Column(unique = true)
+  private String googleBooksId;
+
+  @Column(columnDefinition = "text")
+  private String description;
 
   public BookDAO() {
   }
 
-  public BookDAO(String title, String author, String thumbnail, String publishedDate, String isbn,
+  public BookDAO(String title, String author, String thumbnail, Date publishedDate, String isbn,
       String genre, String publisher) {
     this.title = title;
     this.author = author;
@@ -46,28 +60,12 @@ public class BookDAO implements Serializable {
     this.publisher = publisher;
   }
 
-  public String getIsbn() {
-    return isbn;
+  public Long getId() {
+    return id;
   }
 
-  public void setIsbn(String isbn) {
-    this.isbn = isbn;
-  }
-
-  public String getThumbnail() {
-    return thumbnail;
-  }
-
-  public void setThumbnail(String thumbnail) {
-    this.thumbnail = thumbnail;
-  }
-
-  public String getAuthor() {
-    return author;
-  }
-
-  public void setAuthor(String author) {
-    this.author = author;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getTitle() {
@@ -78,20 +76,36 @@ public class BookDAO implements Serializable {
     this.title = title;
   }
 
-  public Long getId() {
-    return id;
+  public String getAuthor() {
+    return author;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setAuthor(String author) {
+    this.author = author;
   }
 
-  public String getPublishedDate() {
+  public String getThumbnail() {
+    return thumbnail;
+  }
+
+  public void setThumbnail(String thumbnail) {
+    this.thumbnail = thumbnail;
+  }
+
+  public Date getPublishedDate() {
     return publishedDate;
   }
 
-  public void setPublishedDate(String publishedDate) {
+  public void setPublishedDate(Date publishedDate) {
     this.publishedDate = publishedDate;
+  }
+
+  public String getIsbn() {
+    return isbn;
+  }
+
+  public void setIsbn(String isbn) {
+    this.isbn = isbn;
   }
 
   public String getGenre() {
@@ -102,12 +116,28 @@ public class BookDAO implements Serializable {
     this.genre = genre;
   }
 
+  public String getPublisher() {
+    return publisher;
+  }
+
   public void setPublisher(String publisher) {
     this.publisher = publisher;
   }
 
-  public String getPublisher() {
-    return publisher;
+  public String getGoogleBooksId() {
+    return googleBooksId;
+  }
+
+  public void setGoogleBooksId(String googleBooksId) {
+    this.googleBooksId = googleBooksId;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   @Override
@@ -119,14 +149,12 @@ public class BookDAO implements Serializable {
       return false;
     }
     BookDAO bookDAO = (BookDAO) o;
-    return id.equals(bookDAO.id) && title.equals(bookDAO.title) && author.equals(bookDAO.author)
-        && thumbnail.equals(bookDAO.thumbnail) && publishedDate.equals(bookDAO.publishedDate)
-        && isbn.equals(bookDAO.isbn) && genre.equals(bookDAO.genre) && publisher.equals(
-        bookDAO.publisher);
+    return Objects.equals(isbn, bookDAO.isbn);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, author, thumbnail, publishedDate, isbn, genre, publisher);
+    return Objects.hash(isbn);
   }
+
 }

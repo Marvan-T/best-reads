@@ -104,7 +104,7 @@
           />
         </template>
       </v-col>
-      <view-book-thumbnail :thumbnail="bookData.imageLinks.thumbnail" />
+      <view-book-thumbnail :thumbnail="bookData.imageLinks.thumbnail"/>
     </v-row>
     <v-col
       v-if="isIsbnValid && !isLoading"
@@ -147,7 +147,6 @@ import UserRatings from "@/components/viewbook/UserRatings";
 import AboutBook from "@/components/viewbook/AboutBook";
 import {EventBus} from "@/event-bus";
 import BookCollections from "@/components/viewbook/BookCollections.vue";
-import {getRecs, exportData, isAwsEnabled, updateAws} from "@/api/personalize";
 import BookCategoryCarousel from "@/components/home/BookCategoryCarousel";
 
 export default {
