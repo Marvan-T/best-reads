@@ -14,7 +14,9 @@ public record Book(String id,
                    String language,
                    int averageRating,
                    int ratingsCount,
-                   String isbn) {
+                   String isbn,
+                   String thumbnail,
+                   String googleBooksId) {
 
   public Book(String title,
       List<String> authors,
@@ -24,6 +26,6 @@ public record Book(String id,
       String isbn) {
 
     this(null, title, authors, publisher, "Unknown", description, 0, List.of(), imageLinks,
-        "Unknown", 0, 0, isbn);
+        "Unknown", 0, 0, isbn, null, null);
   }
 }

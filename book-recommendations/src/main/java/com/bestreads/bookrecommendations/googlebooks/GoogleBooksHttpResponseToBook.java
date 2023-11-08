@@ -55,7 +55,9 @@ public class GoogleBooksHttpResponseToBook implements HttpResponseToBook {
             item.volumeInfo().language(),
             item.volumeInfo().averageRating(),
             item.volumeInfo().ratingsCount(),
-            getISBN(item)
+            getISBN(item),
+            null,
+            null
         ))
         .toList();
   }

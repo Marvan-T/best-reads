@@ -29,8 +29,18 @@ public class BookDAOService {
       newBook.setIsbn(bookToAdd.isbn());
       newBook.setAuthor(String.join(", ", bookToAdd.authors()));
       newBook.setTitle(bookToAdd.title());
-      newBook.setThumbnail(bookToAdd.imageLinks().thumbnail());
-      newBook.setGoogleBooksId(bookToAdd.id());
+
+      if (bookToAdd.imageLinks() != null && bookToAdd.imageLinks().thumbnail() != null) {
+        newBook.setThumbnail(bookToAdd.imageLinks().thumbnail());
+      } else {
+        newBook.setThumbnail(bookToAdd.thumbnail());
+      }
+
+      if (bookToAdd.googleBooksId() != null) {
+        newBook.setGoogleBooksId(bookToAdd.googleBooksId());
+      } else {
+        newBook.setGoogleBooksId(bookToAdd.id());
+      }
 
       try {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

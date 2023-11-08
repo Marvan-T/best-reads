@@ -8,6 +8,11 @@ module.exports = {
       cert: fs.readFileSync('./local-certs/localhost+1.pem'),
     },
     proxy: {
+      '/api/extensions': {
+        target: 'http://localhost:5208',
+        ws: true,
+        changeOrigin: true
+      },
       '/api': {
         target: 'http://localhost:8080',
         ws: true,

@@ -5,83 +5,51 @@
     </h3>
     <v-card class="pa-4">
       <v-row>
-        <v-col
-          v-if="category"
-          :cols="getNumberOfColumns"
-        >
-          <p>
-            Genre:
-          </p>
+        <v-col v-if="category" :cols="numberOfColumns">
+          <p>Genre:</p>
         </v-col>
-        <v-col :cols="getNumberOfColumns">
+        <v-col :cols="numberOfColumns">
           <p v-if="category">
             {{ categories }}
           </p>
         </v-col>
-        <v-col
-          v-if="publisher"
-          :cols="getNumberOfColumns"
-        >
-          <p>
-            Publisher:
-          </p>
+        <v-col v-if="publisher" :cols="numberOfColumns">
+          <p>Publisher:</p>
         </v-col>
-        <v-col :cols="getNumberOfColumns">
+        <v-col :cols="numberOfColumns">
           <p v-if="publisher">
             {{ publisher }}
           </p>
         </v-col>
       </v-row>
       <v-row class="mt-0">
-        <v-col
-          v-if="publishedDate"
-          :cols="getNumberOfColumns"
-        >
-          <p>
-            Published date:
-          </p>
+        <v-col v-if="publishedDate" :cols="numberOfColumns">
+          <p>Published date:</p>
         </v-col>
-        <v-col :cols="getNumberOfColumns">
+        <v-col :cols="numberOfColumns">
           <p v-if="publishedDate">
-            {{ formatDate() }}
+            {{ formattedDate }}
           </p>
         </v-col>
-        <v-col
-          v-if="pages"
-          :cols="getNumberOfColumns"
-        >
-          <p>
-            Number of pages:
-          </p>
+        <v-col v-if="pages" :cols="numberOfColumns">
+          <p>Number of pages:</p>
         </v-col>
-        <v-col :cols="getNumberOfColumns">
+        <v-col :cols="numberOfColumns">
           <p v-if="pages">
             {{ pages }}
           </p>
         </v-col>
       </v-row>
       <v-row>
-        <p
-          v-if="originalDescription"
-          class="font-italic pa-4"
-        >
+        <p v-if="originalDescription" class="font-italic pa-4">
           {{ description }}
         </p>
         <v-layout justify-center>
-          <v-card-actions
-            v-if="originalDescription && originalDescription.length > 400"
-            class="mb-5"
-          >
-            <v-btn
-              v-if="isShortDescription"
-              @click="viewWholeDescription"
-            >
+          <v-card-actions v-if="shouldShowDescriptionToggle" class="mb-5">
+            <v-btn v-if="isShortDescription" @click="toggleDescription">
               View more
             </v-btn>
-            <v-btn
-              v-else
-              @click="minimiseDescription"
-            >
+            <v-btn v-else @click="toggleDescription">
               View less
             </v-btn>
           </v-card-actions>
@@ -102,55 +70,40 @@ export default {
     publisher: {type: String, required: false, default: "N/A"}
   },
   data: () => ({
-    categories: '',
-    date: '',
-    description: '',
     isShortDescription: true
   }),
   computed: {
-    getNumberOfColumns() {
-      if (this.$vuetify.breakpoint.xs) {
-        return 6;
-      }
-      return 3;
+    numberOfColumns() {
+      return this.$vuetify.breakpoint.xs ? 6 : 3;
     },
-  },
-  mounted() {
-    this.categories = this.category
-    this.date = this.publishedDate
-    this.description = `${this.truncateText(this.originalDescription, 400)}`
+    formattedDate() {
+      const date = new Date(this.publishedDate);
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+        "Nov", "Dec"];
+      return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+    },
+    description() {
+      return this.isShortDescription
+        ? this.truncateText(this.originalDescription, 400)
+        : this.originalDescription;
+    },
+    shouldShowDescriptionToggle() {
+      return this.originalDescription && this.originalDescription.length > 400;
+    },
+    categories() {
+      return this.category;
+    }
   },
   methods: {
-    formatDate() {
-      const formattedDate = new Date(this.date);
-      const monthNames = [
-        "Jan", "Feb", "Mar", "Apr",
-        "May", "Jun", "Jul", "Aug",
-        "Sep", "Oct", "Nov", "Dec"
-      ];
-
-      const monthIndex = formattedDate.getMonth();
-      return formattedDate.getDate() + " " + monthNames[monthIndex] + " "
-        + formattedDate.getFullYear()
-    },
-    viewWholeDescription() {
-      this.description = this.originalDescription
-      this.isShortDescription = false
-    },
-    minimiseDescription() {
-      this.description = `${this.truncateText(this.originalDescription, 400)}`
-      this.isShortDescription = true
+    toggleDescription() {
+      this.isShortDescription = !this.isShortDescription;
     },
     truncateText(text, maxCharacterCount) {
-      if (text.length > maxCharacterCount) {
-        return text.substring(0, maxCharacterCount) + '...'
-      }
-      return text
+      return text.length > maxCharacterCount ? text.substring(0, maxCharacterCount) + '...' : text;
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>
