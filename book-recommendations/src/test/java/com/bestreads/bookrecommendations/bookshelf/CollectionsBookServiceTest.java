@@ -136,7 +136,7 @@ class CollectionsBookServiceTest {
         4,
         12345,
         isbn
-    );
+        , "https://tinyurl.com/2x4j7v6y", "213145gnase");
 
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     Date publishedDate = format.parse(book.publishedDate());
