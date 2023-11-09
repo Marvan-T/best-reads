@@ -272,7 +272,7 @@ export default {
       });
     },
     async fetchRecommendations() {
-      if (process.env.VUE_APP_RECOMMENDATIONS_FEATURE) {
+      if (window._env_.VUE_APP_RECOMMENDATIONS_FEATURE === 'true') {
         await this.updateRecommendations(this.getUpdatedBookData);
         this.recommendations = this.getRecommendations;
       }
