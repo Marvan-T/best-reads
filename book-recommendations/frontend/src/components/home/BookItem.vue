@@ -60,7 +60,7 @@ export default {
     },
     bookData: {
       type: Object,
-      required: false
+      required: true
     }
   },
   deactivated() {
