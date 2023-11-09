@@ -24,7 +24,7 @@ export default new Vuex.Store({
         googleBooksId
       };
 
-      if (state.bookData.googleBooksId) { // recommendation
+      if (state.bookData.googleBooksId) { // from recommendation
         let isbn13Object = state.bookData.industryIdentifiers.find(
           identifier => identifier.type === 'ISBN_13');
         updatedBookData.isbn = isbn13Object.identifier;
@@ -46,7 +46,6 @@ export default new Vuex.Store({
         }
       }
 
-      // Authors?
       return updatedBookData;
     },
     getRecommendations: state => state.recommendations
