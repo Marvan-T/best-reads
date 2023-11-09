@@ -141,7 +141,6 @@ import AboutBook from "@/components/viewbook/AboutBook";
 import {EventBus} from "@/event-bus";
 import BookCollections from "@/components/viewbook/BookCollections.vue";
 import BookCategoryCarousel from "@/components/home/BookCategoryCarousel";
-import {getRecommendations} from "@/api/recommendations";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
@@ -204,7 +203,7 @@ export default {
       }
       return this.bookData.thumbnail || defaultThumbnail;
     },
-    ...mapGetters(['getUpdatedBookData'])
+    ...mapGetters(['getUpdatedBookData', 'getRecommendations'])
   },
   async activated() {
     //view-book - from search results
@@ -217,6 +216,7 @@ export default {
 
     if (this.viewBookEmitted === false) {
       this.bookData = this.previousBookData;
+      this.recommendations = this.getRecommendations;
       this.isLoading = false;
       this.updateDocumentTitle();
     }
@@ -234,7 +234,7 @@ export default {
         await this.updateBookData(bookData);
         this.updateDocumentTitle();
         this.isbn = bookData.isbn;
-        await this.getRecommendations();
+        await this.fetchRecommendations();
       }
       this.isLoading = false;
     },
@@ -242,7 +242,7 @@ export default {
       this.isLoading = true;
       this._resetBookView();
       this.bookData = this.getUpdatedBookData;
-      await this.getRecommendations();
+      await this.fetchRecommendations();
       this.isLoading = false;
     },
     async getBookData(queryData) {
@@ -258,7 +258,7 @@ export default {
         this.bookData = await getBookInfo(this.isbn, queryData.title, queryData.authors);
         await this.updateBookData(this.bookData);
         this.updateDocumentTitle();
-        await this.getRecommendations();
+        await this.fetchRecommendations();
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -271,12 +271,10 @@ export default {
         searchTerm: author
       });
     },
-    async getRecommendations() {
+    async fetchRecommendations() {
       if (process.env.VUE_APP_RECOMMENDATIONS_FEATURE) {
-        const result = await getRecommendations(this.getUpdatedBookData)
-        if (result.success) {
-          this.recommendations = result.data
-        }
+        await this.updateRecommendations(this.getUpdatedBookData);
+        this.recommendations = this.getRecommendations;
       }
     },
     updateDocumentTitle() {
@@ -304,7 +302,7 @@ export default {
       this.recommendations = []
     },
     ...mapActions([
-      'updateBookData'
+      'updateBookData', 'updateRecommendations'
     ]),
   }
 }
