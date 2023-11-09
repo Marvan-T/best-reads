@@ -26,6 +26,8 @@
                 :isbn="books[+index + i].isbn"
                 :authors="books[+index + i].authors"
                 :category="bestSellerCategory"
+                :book-data="books[+index + i]"
+                @populate-from-recommendations="$emit('populate-from-recommendations')"
               />
             </template>
           </v-row>

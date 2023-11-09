@@ -53,7 +53,9 @@ class BookSearchServiceTest {
         "en",
         0,
         0,
-        "9780735211292"
+        "9780735211292",
+        "thumbnail",
+        "abdfsdvf123f"
     );
   }
 

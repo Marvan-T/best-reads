@@ -10,8 +10,15 @@ import com.bestreads.bookrecommendations.book.Book;
 import com.bestreads.bookrecommendations.book.BookDAO;
 import com.bestreads.bookrecommendations.book.BookDAOService;
 import com.bestreads.bookrecommendations.book.ImageLinks;
-
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,13 +26,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Collections;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 class CollectionsBookServiceTest {
@@ -117,7 +117,7 @@ class CollectionsBookServiceTest {
    * is tested while we already have an existing collection
    */
   @Test
-  void updateCollectionsForBook_NewBookAndNewCollection() {
+  void updateCollectionsForBook_NewBookAndNewCollection() throws ParseException {
     // Set up test data
     String userId = "123";
     String isbn = "9783161484100";
@@ -136,13 +136,16 @@ class CollectionsBookServiceTest {
         4,
         12345,
         isbn
-    );
+        , "https://tinyurl.com/2x4j7v6y", "213145gnase");
+
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    Date publishedDate = format.parse(book.publishedDate());
 
     BookDAO newBookDAOForBook = new BookDAO(
         book.title(),
         String.join(", ", book.authors()),
         book.imageLinks().thumbnail(),
-        book.publishedDate(),
+        publishedDate,
         book.isbn(),
         book.categories().toString(),
         book.publisher()

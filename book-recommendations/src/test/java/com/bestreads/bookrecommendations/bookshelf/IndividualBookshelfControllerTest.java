@@ -13,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bestreads.bookrecommendations.book.BookDAO;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,7 +80,7 @@ class IndividualBookshelfControllerTest {
     book.setAuthor("author");
     book.setIsbn("1234");
     book.setThumbnail("web.com");
-    book.setPublishedDate("2017");
+    book.setPublishedDate(Date.from(Instant.parse("2017-01-01T00:00:00.00Z")));
   }
 
   @Test
@@ -104,7 +106,7 @@ class IndividualBookshelfControllerTest {
                 "author": "author",
                 "isbn": "1234",
                 "thumbnail": "web.com",
-                "publishedDate": "2017"
+                "publishedDate": "2017-01-01T00:00:00.000+00:00"
               }
             ]
         }

@@ -156,7 +156,7 @@ export default {
     shouldCreateCollection() {
       return this.newCollectionName.length > 0;
     },
-    ...mapGetters(['collectionValidationRules'])
+    ...mapGetters(['collectionValidationRules', 'getUpdatedBookData'])
   },
   async mounted() {
     await this.getUsersCollections();
@@ -190,7 +190,7 @@ export default {
       const token = await this.$auth.getTokenSilently();
       const collectionsAndBook = {
         collections: this.collectionsToUpdate,
-        book: this.bookData,
+        book: this.getUpdatedBookData,
       };
       const savedCollections = await saveUserCollections(token, collectionsAndBook);
 

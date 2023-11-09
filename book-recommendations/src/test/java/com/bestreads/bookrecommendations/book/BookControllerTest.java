@@ -74,7 +74,10 @@ class BookControllerTest {
         "en",
         3,
         962,
-        "9780735211292"
+        "9780735211292",
+        "http://books.google.com/books/content?id=hxL2qWMAgv8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "23125gnbfs"
+
     );
   }
 

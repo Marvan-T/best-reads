@@ -30,6 +30,7 @@
 <script>
 import {titleCase} from "title-case";
 import {EventBus} from "@/event-bus";
+import {mapActions} from "vuex";
 
 export default {
   name: "BookItem",
@@ -56,6 +57,10 @@ export default {
     category: {
       type: String,
       required: true
+    },
+    bookData: {
+      type: Object,
+      required: true
     }
   },
   deactivated() {
@@ -70,17 +75,30 @@ export default {
       return hover ? "blue-grey lighten-4" : "transparent";
     },
     async emitViewBook() {
-      if (this.$route.name !== "book") {
-        await this.$router.push({name: this.category === "Series Books" ? 'search' : 'book'});
+      switch (this.$route.name) {
+        case "book":
+          await this.updateBookData(this.bookData)
+          this.$emit("populate-from-recommendations")
+          break;
+        case "Root":
+        case "homePage":
+          if (this.$route.name !== "book") {
+            await this.$router.push({name: this.category === "Series Books" ? 'search' : 'book'});
+          }
+          EventBus.$emit(this.category === "Series Books" ? 'search-triggered' : 'view-book-other',
+            {
+              searchType: 'title',
+              searchTerm: this.bookTitle.toLowerCase(),
+              isbn: this.isbn,
+              title: this.bookTitle,
+              authors: this.authors,
+            });
+          break;
       }
-      EventBus.$emit(this.category === "Series Books" ? 'search-triggered' : 'view-book-other', {
-        searchType: 'title',
-        searchTerm: this.bookTitle.toLowerCase(),
-        isbn: this.isbn,
-        title: this.bookTitle,
-        authors: this.authors,
-      });
-    }
+    },
+    ...mapActions([
+      'updateBookData'
+    ]),
   }
 }
 </script>

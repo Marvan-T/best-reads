@@ -54,9 +54,10 @@ public class BookSearchService {
   }
 
   /**
-   * Makes a request to Google Books API to get the book data for the given ISBN. If no book is
-   * found, it makes a request to search by title and author. If no book is found, it throws an
-   * `IllegalArgumentException`. - Is this the right type of exception to throw?
+   * This method performs the following tasks: 1. Makes a request to the Google Books API using the
+   * provided ISBN to gather data related to the book. 2. If no book data is found based on the
+   * ISBN, it initiates another search using the title and author of the book. 3. If the book data
+   * is still not found, it leads to an `IllegalArgumentException`.
    */
   public Book getBookData(String isbn, String title, String authors) {
     List<Book> books = getBooksFromResponse(googleBooksService.searchVolumeByIsbn(

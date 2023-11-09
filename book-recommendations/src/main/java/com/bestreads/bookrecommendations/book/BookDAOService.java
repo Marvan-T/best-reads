@@ -1,5 +1,7 @@
 package com.bestreads.bookrecommendations.book;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +23,45 @@ public class BookDAOService {
 
   @Transactional
   public BookDAO addNewBook(Book bookToAdd) {
-    var currentBook = bookDAORepository.findByIsbn(bookToAdd.isbn());
+    Optional<BookDAO> currentBook = bookDAORepository.findByIsbn(bookToAdd.isbn());
     if (currentBook.isEmpty()) {
       var newBook = new BookDAO();
       newBook.setIsbn(bookToAdd.isbn());
-      newBook.setAuthor(
-          Optional.ofNullable(bookToAdd.authors()).map(a -> String.join(", ", a)).orElse("N/A"));
+      newBook.setAuthor(String.join(", ", bookToAdd.authors()));
       newBook.setTitle(bookToAdd.title());
-      newBook.setThumbnail(bookToAdd.imageLinks().thumbnail());
-      newBook.setGenre(
-          Optional.ofNullable(bookToAdd.categories()).map(c -> c.get(0)).orElse("N/A"));
-      newBook.setPublisher(Optional.ofNullable(bookToAdd.publisher()).orElse("N/A"));
-      newBook.setPublishedDate(Optional.ofNullable(bookToAdd.publishedDate()).orElse("N/A"));
+
+      if (bookToAdd.imageLinks() != null && bookToAdd.imageLinks().thumbnail() != null) {
+        newBook.setThumbnail(bookToAdd.imageLinks().thumbnail());
+      } else {
+        newBook.setThumbnail(bookToAdd.thumbnail());
+      }
+
+      if (bookToAdd.googleBooksId() != null) {
+        newBook.setGoogleBooksId(bookToAdd.googleBooksId());
+      } else {
+        newBook.setGoogleBooksId(bookToAdd.id());
+      }
+
+      try {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        newBook.setPublishedDate(format.parse(bookToAdd.publishedDate()));
+      } catch (ParseException e) {
+        try {
+          newBook.setPublishedDate(new SimpleDateFormat("yyyy-MM-dd").parse("1900-01-01"));
+        } catch (ParseException ex) {
+          ex.printStackTrace();
+        }
+      }
+
+      newBook.setGenre(String.join(", ", bookToAdd.categories()));
+      newBook.setPublisher(bookToAdd.publisher());
+      newBook.setDescription(bookToAdd.description());
+
       return bookDAORepository.save(newBook);
     } else {
       return currentBook.get();
     }
   }
+
 
 }

@@ -64,12 +64,6 @@
             </h2>
           </div>
         </div>
-        <average-ratings
-          :id="bookData.id"
-          :rating="bookData.averageRating ? parseInt(bookData.averageRating) : 0"
-          heading="Average rating"
-          :ratings-count="bookData.ratingsCount ? parseInt(bookData.ratingsCount) : 0"
-        />
         <template v-if="!$auth.isAuthenticated">
           <v-alert
             outlined
@@ -82,7 +76,6 @@
             to add your own ratings and manage collections
           </v-alert>
         </template>
-
         <template v-if="$auth.isAuthenticated && isIsbnValid">
           <template v-if="!ratingsLoaded && !collectionsLoaded">
             <v-progress-circular
@@ -104,7 +97,7 @@
           />
         </template>
       </v-col>
-      <view-book-thumbnail :thumbnail="bookData.imageLinks.thumbnail" />
+      <view-book-thumbnail :thumbnail="thumbnailUrl" />
     </v-row>
     <v-col
       v-if="isIsbnValid && !isLoading"
@@ -134,6 +127,7 @@
       <book-category-carousel
         best-seller-category="You may also like"
         :books="recommendations"
+        @populate-from-recommendations="populateFromRecommendation"
       />
     </v-row>
   </v-container>
@@ -142,13 +136,12 @@
 <script>
 import ViewBookThumbnail from "@/components/viewbook/ViewBookThumbnail";
 import {getBookInfo} from "@/api/view-book";
-import AverageRatings from "@/components/viewbook/AverageRatings";
 import UserRatings from "@/components/viewbook/UserRatings";
 import AboutBook from "@/components/viewbook/AboutBook";
 import {EventBus} from "@/event-bus";
 import BookCollections from "@/components/viewbook/BookCollections.vue";
-import {getRecs, exportData, isAwsEnabled, updateAws} from "@/api/personalize";
 import BookCategoryCarousel from "@/components/home/BookCategoryCarousel";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: 'ViewBook',
@@ -157,7 +150,6 @@ export default {
     BookCategoryCarousel,
     AboutBook,
     UserRatings,
-    AverageRatings,
     ViewBookThumbnail
   },
   data: function () {
@@ -203,7 +195,15 @@ export default {
         ofst => this.$vuetify.breakpoint[ofst]);
 
       return offSetValues[offset] || 9;
-    }
+    },
+    thumbnailUrl() {
+      const defaultThumbnail = "https://play-lh.googleusercontent.com/_tslXR7zUXgzpiZI9t70ywHqWAxwMi8LLSfx8Ab4Mq4NUTHMjFNxVMwTM1G0Q-XNU80"
+      if (this.bookData.imageLinks && this.bookData.imageLinks.thumbnail) {
+        return this.bookData.imageLinks.thumbnail;
+      }
+      return this.bookData.thumbnail || defaultThumbnail;
+    },
+    ...mapGetters(['getUpdatedBookData', 'getRecommendations'])
   },
   async activated() {
     //view-book - from search results
@@ -216,17 +216,14 @@ export default {
 
     if (this.viewBookEmitted === false) {
       this.bookData = this.previousBookData;
+      this.recommendations = this.getRecommendations;
       this.isLoading = false;
       this.updateDocumentTitle();
     }
   },
   deactivated() {
-    this.previousBookData = this.bookData;
-    this.bookData = null;
+    this._resetBookView();
     this.isLoading = true;
-    this.viewBookEmitted = false;
-    this.collectionsLoaded = false;
-    this.ratingsLoaded = false;
     EventBus.$off(['search-triggered', 'view-book', 'view-book-other']);
   },
   methods: {
@@ -234,9 +231,18 @@ export default {
       this.viewBookEmitted = true;
       if (bookData) {
         this.bookData = bookData;
+        await this.updateBookData(bookData);
         this.updateDocumentTitle();
         this.isbn = bookData.isbn;
+        await this.fetchRecommendations();
       }
+      this.isLoading = false;
+    },
+    async populateFromRecommendation() {
+      this.isLoading = true;
+      this._resetBookView();
+      this.bookData = this.getUpdatedBookData;
+      await this.fetchRecommendations();
       this.isLoading = false;
     },
     async getBookData(queryData) {
@@ -250,7 +256,9 @@ export default {
       }
       try {
         this.bookData = await getBookInfo(this.isbn, queryData.title, queryData.authors);
+        await this.updateBookData(this.bookData);
         this.updateDocumentTitle();
+        await this.fetchRecommendations();
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -262,6 +270,12 @@ export default {
         searchType: 'author',
         searchTerm: author
       });
+    },
+    async fetchRecommendations() {
+      if (process.env.VUE_APP_RECOMMENDATIONS_FEATURE) {
+        await this.updateRecommendations(this.getUpdatedBookData);
+        this.recommendations = this.getRecommendations;
+      }
     },
     updateDocumentTitle() {
       document.title = this.bookData.title ?? `Book Details`;
@@ -278,7 +292,18 @@ export default {
     },
     goToGoogle() {
       window.open("https://www.google.com", "_blank")
-    }
+    },
+    _resetBookView() {
+      this.previousBookData = this.bookData;
+      this.bookData = null;
+      this.viewBookEmitted = false;
+      this.collectionsLoaded = false;
+      this.ratingsLoaded = false;
+      this.recommendations = []
+    },
+    ...mapActions([
+      'updateBookData', 'updateRecommendations'
+    ]),
   }
 }
 </script>
