@@ -142,6 +142,7 @@ import {EventBus} from "@/event-bus";
 import BookCollections from "@/components/viewbook/BookCollections.vue";
 import BookCategoryCarousel from "@/components/home/BookCategoryCarousel";
 import {mapActions, mapGetters} from "vuex";
+import {getRecommendationsStatus} from "@/api/features";
 
 export default {
   name: 'ViewBook',
@@ -179,7 +180,7 @@ export default {
         xs: 7
       };
       const cols = Object.keys(colsToTake).find(
-        col => this.$vuetify.breakpoint[col]);
+          col => this.$vuetify.breakpoint[col]);
 
       return colsToTake[cols] || 5;
     },
@@ -192,7 +193,7 @@ export default {
       };
 
       const offset = Object.keys(offSetValues).find(
-        ofst => this.$vuetify.breakpoint[ofst]);
+          ofst => this.$vuetify.breakpoint[ofst]);
 
       return offSetValues[offset] || 9;
     },
@@ -272,7 +273,7 @@ export default {
       });
     },
     async fetchRecommendations() {
-      if (process.env.VUE_APP_RECOMMENDATIONS_FEATURE) {
+      if (await getRecommendationsStatus()) {
         await this.updateRecommendations(this.getUpdatedBookData);
         this.recommendations = this.getRecommendations;
       }
