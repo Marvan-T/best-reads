@@ -1,46 +1,29 @@
 <template>
-  <div>
-    <v-hover
-      v-slot="{ hover }"
-      ref="hoverEffectRef"
+  <v-hover v-slot="{ hover }">
+    <v-col
+      class="mt-12"
+      cols="12"
     >
-      <v-card
-        :color="getHoverEffect(hover)"
-        outlined
-        @click="emitViewBook"
-      >
-        <div
-          v-if="selectable"
-          style="height:10px; display: flex; justify-content: flex-end"
+      <v-row>
+        <v-card
+          class="full-width-card"
+          :color="getHoverEffect(hover)"
+          outlined
+          flat
+          @click="emitViewBook"
         >
-          <!--@click.stop stops the emitViewBook event from happening within the checkbox-->
-          <v-checkbox
-            :value="selected"
-            @click.stop="changeSelected()"
-          />
-        </div>
-        <v-card-actions class="justify-center mb-0 pt-6">
-          <a @click="emitViewBook">
-            <v-img
-              class="rounded mb-0"
-              :lazy-src="thumbnail"
-              height="192px"
-              width="128px"
-              :src="thumbnail"
-            />
-          </a>
-        </v-card-actions>
-        <v-card-text class="mt-0">
-          <div class="text-subtitle-2 text--primary mt-0">
-            {{ truncateText(title, 30) }}
-          </div>
-          <div class="text-subtitle-2 font-italic font-size-small">
-            {{ getTruncatedAuthor }}
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-hover>
-  </div>
+          <v-col cols="2">
+            <p>Some text</p>
+          </v-col>
+          <v-col
+            cols="6"
+          >
+            <p>Text 2 </p>
+          </v-col>
+        </v-card>
+      </v-row>
+    </v-col>
+  </v-hover>
 </template>
 
 <script>
@@ -94,6 +77,13 @@ export default {
         ? this.formatDate()
         : this.authorsWithFormattedDate();
     },
+    getTruncatedDescription() {
+      const maxCharacterCount = 100;
+      if (this.bookData.description.length > maxCharacterCount) {
+        return this.bookData.description.substring(0, maxCharacterCount) + '...'
+      }
+      return this.bookData.description;
+    }
   },
   deactivated() {
     //clear the hover effect when navigating away from the page
@@ -148,15 +138,10 @@ export default {
 </script>
 
 <style scoped>
-div {
-  margin: 0 15px 15px 15px;
-  width: auto;
-  height: auto;
-  font-size: small;
+
+.full-width-card {
+  width: 100%;
 }
 
-/deep/ .v-card {
-  width: 250px;
-  height: 350px;
-}
+
 </style>

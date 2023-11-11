@@ -20,20 +20,18 @@
       </p>
     </v-row>
     <v-row no-gutters>
-      <v-col
+      <book-details
         v-for="book in searchResults"
         :key="book.isbn"
-      >
-        <book-details
-          origin="search"
-          :authors="checkForMultipleAuthors(book.authors)"
-          :title="book.title"
-          :published-date="book.publishedDate"
-          :thumbnail="book.imageLinks.thumbnail"
-          :isbn="book.isbn"
-          :book-data="book"
-        />
-      </v-col>
+        origin="search"
+        :authors="checkForMultipleAuthors(book.authors)"
+        :title="book.title"
+        :published-date="book.publishedDate"
+        :thumbnail="book.imageLinks.thumbnail"
+        :description="book.description"
+        :isbn="book.isbn"
+        :book-data="book"
+      />
     </v-row>
     <v-col>
       <v-img
@@ -77,9 +75,10 @@
 </template>
 
 <script>
-import {searchByAuthor, searchByTitle} from "@/api/search";
+import {searchByAuthor} from "@/api/search";
 import BookDetails from "@/components/search/BookDetails";
 import {EventBus} from "@/event-bus";
+import data from "@/test-data";
 
 export default {
   name: "SearchView",
@@ -118,17 +117,18 @@ export default {
   },
   methods: {
     async performSearch(queryDetails) {
-      this._resetAndUpdateSearchData(queryDetails);
-      this._updatePageTitle();
-      this.isLoading = true;
-
-      if (queryDetails.searchType === "title") {
-        await this.searchByTitle(queryDetails.searchTerm, this.currentStartIndex);
-      } else {
-        await this.searchByAuthor(queryDetails.searchTerm, this.currentStartIndex);
-      }
-
-      this.nextPageAvailable = this.searchResults.length >= this.numberOfItemsPerPage;
+      this.searchResults = data
+      // this._resetAndUpdateSearchData(queryDetails);
+      // this._updatePageTitle();
+      // this.isLoading = true;
+      //
+      // if (queryDetails.searchType === "title") {
+      //   await this.searchByTitle(queryDetails.searchTerm, this.currentStartIndex);
+      // } else {
+      //   await this.searchByAuthor(queryDetails.searchTerm, this.currentStartIndex);
+      // }
+      //
+      // this.nextPageAvailable = this.searchResults.length >= this.numberOfItemsPerPage;
       this.isLoading = false;
     },
     _resetAndUpdateSearchData(queryDetails) {
@@ -144,7 +144,8 @@ export default {
       this.searchResults = await searchByAuthor(author, startIndex)
     },
     async searchByTitle(title, startIndex) {
-      this.searchResults = await searchByTitle(title, startIndex)
+      // this.searchResults = await searchByTitle(title, startIndex)
+      this.searchResults = data
     },
     async previousPage() {
       this.currentStartIndex = this.currentStartIndex - this.numberOfItemsPerPage
@@ -195,8 +196,3 @@ export default {
 }
 </script>
 
-<style scoped>
-section {
-  display: grid;
-}
-</style>
