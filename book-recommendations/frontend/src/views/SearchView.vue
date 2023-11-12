@@ -117,7 +117,6 @@ export default {
   },
   methods: {
     async performSearch(queryDetails) {
-      // this.searchResults = data
       this._resetAndUpdateSearchData(queryDetails);
       this._updatePageTitle();
       this.isLoading = true;
