@@ -30,6 +30,7 @@
         :thumbnail="book.imageLinks.thumbnail"
         :description="book.description"
         :isbn="book.isbn"
+        :categories="book.categories"
         :book-data="book"
       />
     </v-row>
@@ -75,10 +76,9 @@
 </template>
 
 <script>
-import {searchByAuthor} from "@/api/search";
+import {searchByAuthor, searchByTitle} from "@/api/search";
 import BookDetails from "@/components/search/BookDetails";
 import {EventBus} from "@/event-bus";
-import data from "@/test-data";
 
 export default {
   name: "SearchView",
@@ -117,18 +117,18 @@ export default {
   },
   methods: {
     async performSearch(queryDetails) {
-      this.searchResults = data
-      // this._resetAndUpdateSearchData(queryDetails);
-      // this._updatePageTitle();
-      // this.isLoading = true;
-      //
-      // if (queryDetails.searchType === "title") {
-      //   await this.searchByTitle(queryDetails.searchTerm, this.currentStartIndex);
-      // } else {
-      //   await this.searchByAuthor(queryDetails.searchTerm, this.currentStartIndex);
-      // }
-      //
-      // this.nextPageAvailable = this.searchResults.length >= this.numberOfItemsPerPage;
+      // this.searchResults = data
+      this._resetAndUpdateSearchData(queryDetails);
+      this._updatePageTitle();
+      this.isLoading = true;
+
+      if (queryDetails.searchType === "title") {
+        await this.searchByTitle(queryDetails.searchTerm, this.currentStartIndex);
+      } else {
+        await this.searchByAuthor(queryDetails.searchTerm, this.currentStartIndex);
+      }
+
+      this.nextPageAvailable = this.searchResults.length >= this.numberOfItemsPerPage;
       this.isLoading = false;
     },
     _resetAndUpdateSearchData(queryDetails) {
@@ -144,8 +144,7 @@ export default {
       this.searchResults = await searchByAuthor(author, startIndex)
     },
     async searchByTitle(title, startIndex) {
-      // this.searchResults = await searchByTitle(title, startIndex)
-      this.searchResults = data
+      this.searchResults = await searchByTitle(title, startIndex)
     },
     async previousPage() {
       this.currentStartIndex = this.currentStartIndex - this.numberOfItemsPerPage
