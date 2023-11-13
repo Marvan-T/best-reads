@@ -4,12 +4,7 @@
       v-if="isLoading"
       class="justify-center"
     >
-      <v-progress-circular
-        :size="70"
-        :width="7"
-        color="purple"
-        indeterminate
-      />
+      <circles-to-rhombuses-spinner/>
     </v-row>
     <best-seller-filter
       v-if="!isLoading"
@@ -40,10 +35,11 @@ import BookCategoryCarousel from "@/components/home/BookCategoryCarousel";
 import {getBestSellers} from "@/api/home-page-api-calls";
 import BestSellerFilter from "@/components/home/BestSellerFilter";
 import {EventBus} from "@/event-bus";
+import CirclesToRhombusesSpinner from "@/assets/ui-components/CirclesToRhombusesSpinner.vue";
 
 export default {
   name: "HomePage",
-  components: {BookCategory: BookCategoryCarousel, BestSellerFilter},
+  components: {CirclesToRhombusesSpinner, BookCategory: BookCategoryCarousel, BestSellerFilter},
   data: () => ({
     categories: [],
     isLoading: true,

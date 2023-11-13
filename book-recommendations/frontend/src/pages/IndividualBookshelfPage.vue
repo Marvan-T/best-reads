@@ -165,48 +165,37 @@
       v-if="isLoading"
       class="justify-center pt-10"
     >
-      <v-progress-circular
-        :size="70"
-        :width="7"
-        color="primary"
-        indeterminate
-      />
+      <circles-to-rhombuses-spinner/>
     </v-row>
     <v-row no-gutters>
-      <v-col
+      <book-details
         v-for="book in collectionBooks.bookDAOS"
         :key="book.title"
-        :cols="getNumberOfColumns"
-      >
-        <book-details
-          origin="other"
-          :authors="book.author"
-          :title="book.title"
-          :thumbnail="book.thumbnail"
-          :isbn="book.isbn"
-          :published-date="book.publishedDate"
-          :book-data="book"
-          :selectable="editFlag"
-          @selected="bookSelected"
-          @unselected="bookUnselected"
-        />
-      </v-col>
+        origin="other"
+        :authors="book.author"
+        :title="book.title"
+        :thumbnail="book.thumbnail"
+        :isbn="book.isbn"
+        :published-date="book.publishedDate"
+        :book-data="book"
+        :selectable="editFlag"
+        :categories="[book.genre]"
+        @selected="bookSelected"
+        @unselected="bookUnselected"
+      />
     </v-row>
   </v-container>
 </template>
 <script>
 import BookDetails from "@/components/search/BookDetails";
-import {
-  deleteBooksInCollection,
-  getBooksInCollection,
-  updateCollectionName
-} from "@/api/bookshelfBooks";
+import {deleteBooksInCollection, getBooksInCollection, updateCollectionName} from "@/api/bookshelfBooks";
 import {EventBus} from "@/event-bus";
 import {mapGetters} from "vuex";
+import CirclesToRhombusesSpinner from "@/assets/ui-components/CirclesToRhombusesSpinner.vue";
 
 export default {
   name: "IndividualBookshelfPage",
-  components: {BookDetails},
+  components: {CirclesToRhombusesSpinner, BookDetails},
   data: function () {
     return {
       collectionId: "",

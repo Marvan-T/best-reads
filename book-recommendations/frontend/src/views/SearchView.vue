@@ -4,12 +4,7 @@
       v-if="isLoading"
       class="justify-center pt-10"
     >
-      <v-progress-circular
-        :size="70"
-        :width="7"
-        color="primary"
-        indeterminate
-      />
+      <circles-to-rhombuses-spinner></circles-to-rhombuses-spinner>
     </v-row>
     <v-row
       v-else
@@ -20,20 +15,19 @@
       </p>
     </v-row>
     <v-row no-gutters>
-      <v-col
+      <book-details
         v-for="book in searchResults"
         :key="book.isbn"
-      >
-        <book-details
-          origin="search"
-          :authors="checkForMultipleAuthors(book.authors)"
-          :title="book.title"
-          :published-date="book.publishedDate"
-          :thumbnail="book.imageLinks.thumbnail"
-          :isbn="book.isbn"
-          :book-data="book"
-        />
-      </v-col>
+        origin="search"
+        :authors="checkForMultipleAuthors(book.authors)"
+        :title="book.title"
+        :published-date="book.publishedDate"
+        :thumbnail="book.imageLinks.thumbnail"
+        :description="book.description"
+        :isbn="book.isbn"
+        :categories="book.categories"
+        :book-data="book"
+      />
     </v-row>
     <v-col>
       <v-img
@@ -80,10 +74,11 @@
 import {searchByAuthor, searchByTitle} from "@/api/search";
 import BookDetails from "@/components/search/BookDetails";
 import {EventBus} from "@/event-bus";
+import CirclesToRhombusesSpinner from "@/assets/ui-components/CirclesToRhombusesSpinner.vue";
 
 export default {
   name: "SearchView",
-  components: {BookDetails},
+  components: {CirclesToRhombusesSpinner, BookDetails},
   data: function () {
     return {
       searchResults: [],
@@ -195,8 +190,3 @@ export default {
 }
 </script>
 
-<style scoped>
-section {
-  display: grid;
-}
-</style>

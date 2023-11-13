@@ -21,12 +21,7 @@
               v-if="isLoading"
               class="justify-center"
             >
-              <v-progress-circular
-                :size="70"
-                :width="7"
-                color="primary"
-                indeterminate
-              />
+              <circles-to-rhombuses-spinner/>
             </v-row>
             <v-row class="mt-3">
               <collection-item
@@ -60,10 +55,11 @@ import CollectionItem from "@/components/bookshelf/CollectionItem.vue";
 import {getCollection, getCollectionsForUser} from "@/api/bookshelf";
 import {generatePastelColors} from "@/util/util";
 import {EventBus} from "@/event-bus";
+import CirclesToRhombusesSpinner from "@/assets/ui-components/CirclesToRhombusesSpinner.vue";
 
 export default {
   name: "CollectionsPage",
-  components: {CollectionItem, CreateCollectionModal},
+  components: {CirclesToRhombusesSpinner, CollectionItem, CreateCollectionModal},
   data: () => ({
     collections: [],
     colors: [],
