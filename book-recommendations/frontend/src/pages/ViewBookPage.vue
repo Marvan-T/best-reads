@@ -6,12 +6,7 @@
       v-if="isLoading"
       class="justify-center"
     >
-      <v-progress-circular
-        :size="70"
-        :width="7"
-        color="primary"
-        indeterminate
-      />
+      <circles-to-rhombuses-spinner/>
     </v-row>
     <v-row
       v-if="bookData === null && !isLoading"
@@ -123,6 +118,13 @@
         :publisher="bookData.publisher"
       />
     </v-row>
+    <v-row
+      v-if="!isLoading && isIsbnValid && recommendationsLoading"
+      align="center"
+      justify="center"
+    >
+      <book-spinner/>
+    </v-row>
     <v-row v-if="!isLoading && isIsbnValid && recommendations.length > 0">
       <book-category-carousel
         best-seller-category="You may also like"
@@ -143,10 +145,15 @@ import BookCollections from "@/components/viewbook/BookCollections.vue";
 import BookCategoryCarousel from "@/components/home/BookCategoryCarousel";
 import {mapActions, mapGetters} from "vuex";
 import {getRecommendationsStatus} from "@/api/features";
+import BookSpinner from "@/assets/ui-components/BookSpinner.vue";
+import CirclesToRhombusesSpinner from "@/assets/ui-components/CirclesToRhombusesSpinner.vue";
+
 
 export default {
   name: 'ViewBook',
   components: {
+    CirclesToRhombusesSpinner,
+    BookSpinner,
     BookCollections,
     BookCategoryCarousel,
     AboutBook,
@@ -158,6 +165,7 @@ export default {
       bookData: null,
       isbn: "",
       isLoading: true,
+      recommendationsLoading: true,
       previousBookData: null,
       viewBookEmitted: false,
       ratingsLoaded: false,
@@ -217,9 +225,9 @@ export default {
 
     if (this.viewBookEmitted === false) {
       this.bookData = this.previousBookData;
-      this.recommendations = this.getRecommendations;
       this.isLoading = false;
       this.updateDocumentTitle();
+      this.recommendations = this.getRecommendations;
     }
   },
   deactivated() {
@@ -235,9 +243,11 @@ export default {
         await this.updateBookData(bookData);
         this.updateDocumentTitle();
         this.isbn = bookData.isbn;
-        await this.fetchRecommendations();
       }
       this.isLoading = false;
+      if (bookData) {
+        await this.fetchRecommendations();
+      }
     },
     async populateFromRecommendation() {
       this.isLoading = true;
@@ -274,8 +284,10 @@ export default {
     },
     async fetchRecommendations() {
       if (await getRecommendationsStatus()) {
+        this.recommendationsLoading = true;
         await this.updateRecommendations(this.getUpdatedBookData);
         this.recommendations = this.getRecommendations;
+        this.recommendationsLoading = false;
       }
     },
     updateDocumentTitle() {

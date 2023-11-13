@@ -165,12 +165,7 @@
       v-if="isLoading"
       class="justify-center pt-10"
     >
-      <v-progress-circular
-        :size="70"
-        :width="7"
-        color="primary"
-        indeterminate
-      />
+      <circles-to-rhombuses-spinner/>
     </v-row>
     <v-row no-gutters>
       <book-details
@@ -196,10 +191,11 @@ import BookDetails from "@/components/search/BookDetails";
 import {deleteBooksInCollection, getBooksInCollection, updateCollectionName} from "@/api/bookshelfBooks";
 import {EventBus} from "@/event-bus";
 import {mapGetters} from "vuex";
+import CirclesToRhombusesSpinner from "@/assets/ui-components/CirclesToRhombusesSpinner.vue";
 
 export default {
   name: "IndividualBookshelfPage",
-  components: {BookDetails},
+  components: {CirclesToRhombusesSpinner, BookDetails},
   data: function () {
     return {
       collectionId: "",

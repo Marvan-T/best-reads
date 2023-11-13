@@ -4,12 +4,7 @@
       v-if="isLoading"
       class="justify-center pt-10"
     >
-      <v-progress-circular
-        :size="70"
-        :width="7"
-        color="primary"
-        indeterminate
-      />
+      <circles-to-rhombuses-spinner></circles-to-rhombuses-spinner>
     </v-row>
     <v-row
       v-else
@@ -79,10 +74,11 @@
 import {searchByAuthor, searchByTitle} from "@/api/search";
 import BookDetails from "@/components/search/BookDetails";
 import {EventBus} from "@/event-bus";
+import CirclesToRhombusesSpinner from "@/assets/ui-components/CirclesToRhombusesSpinner.vue";
 
 export default {
   name: "SearchView",
-  components: {BookDetails},
+  components: {CirclesToRhombusesSpinner, BookDetails},
   data: function () {
     return {
       searchResults: [],
