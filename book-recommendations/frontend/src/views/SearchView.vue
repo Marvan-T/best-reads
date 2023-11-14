@@ -4,7 +4,7 @@
       v-if="isLoading"
       class="justify-center pt-10"
     >
-      <circles-to-rhombuses-spinner></circles-to-rhombuses-spinner>
+      <circles-to-rhombuses-spinner/>
     </v-row>
     <v-row
       v-else

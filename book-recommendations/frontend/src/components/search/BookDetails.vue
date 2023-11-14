@@ -1,20 +1,21 @@
 <template>
   <v-hover v-slot="{ hover }">
     <v-col
-      class="mt-4"
+      class="mt-4 pl-2"
       cols="12"
       md="6"
     >
       <v-card
-        class="full-width-card"
+        class="d-flex fill-height"
         :color="getHoverEffect(hover)"
         outlined
         flat
         @click="emitViewBook"
       >
-        <v-row>
+        <v-row no-gutters>
           <v-col
-            cols="3"
+            cols="12"
+            md="3"
             class="d-flex align-center justify-center image-container"
           >
             <v-img
@@ -23,7 +24,10 @@
               contain
             />
           </v-col>
-          <v-col cols="9">
+          <v-col
+            cols="12"
+            md="9"
+          >
             <v-card-text>
               <div class="text-h6 mb-2">
                 {{ title }}
@@ -38,10 +42,7 @@
                 <v-chip
                   v-for="(category, index) in categories"
                   :key="category"
-                  :class="{
-                    'ml-2': index > 0 && $vuetify.breakpoint.smAndUp,
-                    'mt-2': index > 0 && $vuetify.breakpoint.xsOnly
-                  }"
+                  :class="{ 'ma-1': index > 0 }"
                   outlined
                   color="primary"
                 >
@@ -55,6 +56,7 @@
     </v-col>
   </v-hover>
 </template>
+
 
 <script>
 import {EventBus} from "@/event-bus";
