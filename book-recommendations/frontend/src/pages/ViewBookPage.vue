@@ -6,7 +6,7 @@
       v-if="isLoading"
       class="justify-center"
     >
-      <circles-to-rhombuses-spinner/>
+      <circles-to-rhombuses-spinner />
     </v-row>
     <v-row
       v-if="bookData === null && !isLoading"
@@ -119,11 +119,11 @@
       />
     </v-row>
     <v-row
-      v-if="!isLoading && isIsbnValid && recommendationsLoading"
+      v-if="recommendationsLoading"
       align="center"
       justify="center"
     >
-      <book-spinner/>
+      <book-spinner />
     </v-row>
     <v-row v-if="!isLoading && isIsbnValid && recommendations.length > 0">
       <book-category-carousel
@@ -148,7 +148,6 @@ import {getRecommendationsStatus} from "@/api/features";
 import BookSpinner from "@/assets/ui-components/BookSpinner.vue";
 import CirclesToRhombusesSpinner from "@/assets/ui-components/CirclesToRhombusesSpinner.vue";
 
-
 export default {
   name: 'ViewBook',
   components: {
@@ -165,7 +164,7 @@ export default {
       bookData: null,
       isbn: "",
       isLoading: true,
-      recommendationsLoading: true,
+      recommendationsLoading: false,
       previousBookData: null,
       viewBookEmitted: false,
       ratingsLoaded: false,
@@ -188,7 +187,7 @@ export default {
         xs: 7
       };
       const cols = Object.keys(colsToTake).find(
-          col => this.$vuetify.breakpoint[col]);
+        col => this.$vuetify.breakpoint[col]);
 
       return colsToTake[cols] || 5;
     },
@@ -201,7 +200,7 @@ export default {
       };
 
       const offset = Object.keys(offSetValues).find(
-          ofst => this.$vuetify.breakpoint[ofst]);
+        ofst => this.$vuetify.breakpoint[ofst]);
 
       return offSetValues[offset] || 9;
     },
