@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { getRecommendations } from '@/api/recommendations';
+import {getRecommendations} from '@/api/recommendations';
 
 Vue.use(Vuex)
 
@@ -36,7 +36,7 @@ export default new Vuex.Store({
         updatedBookData.thumbnail = updatedBookData.imageLinks.thumbnail;
       }
 
-          // Check and update publishedDate
+      // Check and update publishedDate
       if (state.bookData.publishedDate) {
         let parts = state.bookData.publishedDate.split('-');
         if (parts.length === 1) { // only year
@@ -62,12 +62,9 @@ export default new Vuex.Store({
     updateBookData: ({commit}, bookData) => {
       commit('SET_BOOK_DATA', bookData);
     },
-    async updateRecommendations({ commit }, bookData){
-      const result = await getRecommendations(bookData);
-      if (result.success) {
-        const recommendations = result.data;
-        commit('SET_RECOMMENDATIONS', recommendations);
-      }
+    async updateRecommendations({commit}, bookData) {
+      const {result: {data = []}} = await getRecommendations(bookData);
+      commit('SET_RECOMMENDATIONS', data);
     }
   },
   modules: {}
