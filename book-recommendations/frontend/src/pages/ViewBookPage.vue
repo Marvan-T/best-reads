@@ -252,8 +252,8 @@ export default {
       this.isLoading = true;
       this._resetBookView();
       this.bookData = this.getUpdatedBookData;
-      await this.fetchRecommendations();
       this.isLoading = false;
+      await this.fetchRecommendations();
     },
     async getBookData(queryData) {
       this.isLoading = true;
@@ -268,11 +268,11 @@ export default {
         this.bookData = await getBookInfo(this.isbn, queryData.title, queryData.authors);
         await this.updateBookData(this.bookData);
         this.updateDocumentTitle();
-        await this.fetchRecommendations();
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
       }
+      await this.fetchRecommendations();
     },
     async emitAuthorSearch(author) {
       await this.$router.push({name: 'search'});
