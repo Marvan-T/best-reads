@@ -63,8 +63,12 @@ export default new Vuex.Store({
       commit('SET_BOOK_DATA', bookData);
     },
     async updateRecommendations({commit}, bookData) {
-      const {result: {data = []}} = await getRecommendations(bookData);
-      commit('SET_RECOMMENDATIONS', data);
+      try {
+        const {result: {data = []}} = await getRecommendations(bookData);
+        commit('SET_RECOMMENDATIONS', data);
+      } catch (error) {
+        commit('SET_RECOMMENDATIONS', []);
+      }
     }
   },
   modules: {}

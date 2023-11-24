@@ -5,22 +5,18 @@
       color="#D6D6D6"
     >
       <v-row>
-        <v-col
-          v-if="category"
-          :cols="numberOfColumns"
-        >
-          <p class="font-weight-bold text--primary">
-            Genre:
-          </p>
-        </v-col>
-        <v-col :cols="numberOfColumns">
-          <p
-            v-if="category"
-            class="font-weight-light text--primary"
-          >
-            {{ categories }}
-          </p>
-        </v-col>
+        <template v-if="category && category !== ''">
+          <v-col :cols="numberOfColumns">
+            <p class="font-weight-bold text--primary">
+              Genre:
+            </p>
+          </v-col>
+          <v-col :cols="numberOfColumns">
+            <p class="font-weight-light text--primary">
+              {{ categories }}
+            </p>
+          </v-col>
+        </template>
         <v-col
           v-if="publisher"
           :cols="numberOfColumns"
@@ -111,7 +107,7 @@
 export default {
   name: "AboutBook",
   props: {
-    category: {type: String, required: true},
+    category: {type: String, required: false, default: ""},
     publishedDate: {type: String, required: true},
     originalDescription: {type: String, required: true},
     pages: {type: Number, required: true},
