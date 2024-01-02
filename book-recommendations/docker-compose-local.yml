@@ -16,7 +16,7 @@ services:
     depends_on:
       - mongo
     ports:
-      - "5208:80"
+      - "5208:8080"
     environment:
       - Open_AI_Key=$Open_AI_Key
       - AZURE_SEARCH_SERVICE_ENDPOINT=$AZURE_SEARCH_SERVICE_ENDPOINT
