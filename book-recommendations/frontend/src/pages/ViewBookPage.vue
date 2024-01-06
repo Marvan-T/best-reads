@@ -81,12 +81,12 @@
             />
           </template>
           <user-ratings
-            :isbn="
-              isbn.toString()"
+            v-show="ratingsLoaded"
+            :isbn="isbn"
             @user-rating-loaded="ratingsLoaded = true"
           />
           <book-collections
-            :book-isbn="isbn.toString()"
+            v-show="collectionsLoaded"
             :book-data="bookData"
             @collections-loaded="collectionsLoaded = true"
           />
@@ -232,6 +232,8 @@ export default {
   deactivated() {
     this._resetBookView();
     this.isLoading = true;
+    this.ratingsLoaded = false;
+    this.collectionsLoaded = false;
     EventBus.$off(['search-triggered', 'view-book', 'view-book-other']);
   },
   methods: {
@@ -249,9 +251,12 @@ export default {
       }
     },
     async populateFromRecommendation() {
+      this.ratingsLoaded = false;
+      this.collectionsLoaded = false;
       this.isLoading = true;
       this._resetBookView();
       this.bookData = this.getUpdatedBookData;
+      this.isbn = this.bookData.isbn;
       this.isLoading = false;
       await this.fetchRecommendations();
     },

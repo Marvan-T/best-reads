@@ -158,9 +158,13 @@ export default {
     },
     ...mapGetters(['collectionValidationRules', 'getUpdatedBookData'])
   },
+  watch: {
+    async bookData() {
+      await this.getUsersCollections();
+    }
+  },
   async mounted() {
     await this.getUsersCollections();
-    this.$emit('collections-loaded');
   },
   methods: {
     createCollection() {
@@ -184,6 +188,7 @@ export default {
       this._computeCollectionColors();
       this.collectionsToUpdate = this._createDeepCopyOfCollections();
       this.collectionsLoaded = true;
+      this.$emit('collections-loaded');
     },
     async saveCollection() {
       this.collectionSaveInProgress = true;

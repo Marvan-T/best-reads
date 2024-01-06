@@ -127,27 +127,22 @@ export default {
     isLoading: true
   }),
   watch: {
-    // auth created hook is being executed after the created and mounted hooks
-    // from this component are run
-    // therefore this functionality can't be run in mounted/created in here
-    // instead we watch for a change in the $auth.user variable to indicate that it's been populated
-    async '$auth.user'() {
-      await this.getRatingsData()
-      if (this.bookRating !== null && this.bookRating !== "") {
-        this.hasRating = true
-      }
-      this.isLoading = false
-    }
+    async isbn() {
+      await this.fetchRatingsData();
+    },
   },
   async mounted() {
-    await this.getRatingsData()
-    if (this.bookRating !== null && this.bookRating !== "") {
-      this.hasRating = true
-    }
-    this.isLoading = false
-    this.$emit('user-rating-loaded')
+    await this.fetchRatingsData();
   },
   methods: {
+    async fetchRatingsData() {
+      await this.getRatingsData();
+      if (this.bookRating !== null && this.bookRating !== "") {
+        this.hasRating = true;
+      }
+      this.isLoading = false;
+      this.$emit('user-rating-loaded');
+    },
     async getRatingsData() {
       const token = await this.$auth.getTokenSilently();
       this.bookRating = await getUserRating(this.$auth.user.email, this.isbn, token)

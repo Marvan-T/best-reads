@@ -1,18 +1,37 @@
-[![CI workflow](https://github.com/laurenmaylittle-cs/book-recommendations/actions/workflows/ci.yml/badge.svg)](https://github.com/laurenmaylittle-cs/book-recommendations/actions/workflows/ci.yml)
+[![CI workflow](https://github.com/Marvan-T/best-reads/actions/workflows/ci.yml/badge.svg)](https://github.com/Marvan-T/best-reads/actions/workflows/ci.yml)
 
-# book-recommendations
+# Best Reads
 
-For codestyle:
-Press Ctrl+Alt+S to open the IDE settings and select Editor | Code Style. and select Import Scheme. Navigate to book-recommendations and select the codestyle.xml file. 
+"Best Reads" is a web application that was originally developed as a final year group project at
+university. Our aim is to enhance the book discovery experience for users. This repository is a fork
+of the original project, which I maintain, and includes an extension layer that adds new features to
+the project.
 
-## Environment Variables
+- Original Project
+  Repository: [Best Reads](https://github.com/laurenmaylittle-cs/book-recommendations)
+- Extension Project: [Best Reads Extesions](https://github.com/Marvan-T/bestreads-extensions)
 
-| Key  | Value |
-| ------------- | ------------- |
-| google_books_api_key  | (see confluence)  |
-| nytimes_api_key  | (see confluence)  |
+## Deployment
 
+The project is deployed on Azure. You can visit the application using either of the following URLs:
 
-## How to set up the database?
+- Main URL: [Best Reads](https://best-reads.live)
+- Alternative URL: [Best Reads on Azure](https://best-reads.azurewebsites.net)
 
-* Please refer to the set up article on confluence: https://best-reads-confluence.atlassian.net/wiki/spaces/FYGP/pages/1933313/Setting+up
+## Features currently implemented
+
+- **Weekly Best Sellers**: Showcases the weekly best sellers from the New York Times.
+- **Book Descriptions**: Allows users to learn more about different books through their
+  descriptions.
+- **Search Functionality**: Enables users to search for books by title, authors, and ISBN.
+- **Authentication**: Implemented using Auth0.
+- **Collections**: Provides the ability to organize books into collections.
+- **Recommendations**: Offers similar items recommendations. This feature was originally implemented
+  using AWS Personalise and later re-implemented in the extension project using embeddings.
+- **Ratings**: Allows users to rate books.
+
+## What's Coming Up Next?
+
+I've got some exciting updates in the works to make your experience with books discovery better.
+Also,
+I'm planning to migrate the client from Vue 2 to Vue 3.
