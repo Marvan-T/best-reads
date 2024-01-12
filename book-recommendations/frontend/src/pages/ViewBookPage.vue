@@ -277,7 +277,9 @@ export default {
       } catch (error) {
         this.isLoading = false;
       }
-      await this.fetchRecommendations();
+      if (this.bookData) {
+        await this.fetchRecommendations();
+      }
     },
     async emitAuthorSearch(author) {
       await this.$router.push({name: 'search'});
