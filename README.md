@@ -15,7 +15,7 @@ the project.
 
 The project is deployed on Azure. You can visit the application using the following URL:
 
-- URL: [Best Reads on Azure](https://best-reads.azurewebsites.net)
+- URL: [Best Reads](https://best-reads.today)
 
 ## Features currently implemented
 
