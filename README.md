@@ -11,12 +11,6 @@ the project.
   Repository: [Best Reads](https://github.com/laurenmaylittle-cs/book-recommendations)
 - Extension Project: [Best Reads Extesions](https://github.com/Marvan-T/bestreads-extensions)
 
-## Deployment
-
-The project is deployed on Azure. You can visit the application using the following URL:
-
-- URL: [Best Reads](https://best-reads.today)
-
 ## Features currently implemented
 
 - **Weekly Best Sellers**: Showcases the weekly best sellers from the New York Times.
@@ -30,13 +24,4 @@ The project is deployed on Azure. You can visit the application using the follow
 - **Ratings**: Allows users to rate books.
 
 https://github.com/Marvan-T/best-reads/assets/65969444/b592d0a7-0847-4e23-b080-fa086483157e
-
-## What's Coming Up Next?
-
-I've got some exciting updates in the works to make your experience with books discovery better.
-Also,
-I'm planning to migrate the client from Vue 2 to Vue 3.
-
-
-
 
